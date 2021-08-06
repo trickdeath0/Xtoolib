@@ -43,7 +43,7 @@ XtoolibAuto()
 	echo -e "\e[93m[~] Starting  Nmap Scan\e[36m"
 	read -p "Enter Domain or IP Address: " target
 	echo -e "This will take a moment... Get some coffee =]"
-	command nmap -p- -A $target -oN /root/Desktop/Xtoolib/nmap-$target.txt
+	#command nmap -p- -A $target -oN /root/Desktop/Xtoolib/nmap-$target.txt
 	echo -e " "
 	
 	
@@ -58,14 +58,12 @@ XtoolibAuto()
 	## Nikto
 	echo -e "\e[93m[~] Starting  Nikto Scan\e[36m"
 	## build loop for all http open and scan them
-	cat http-$target.txt | while read line; do x-terminal-emulator --execute nikto -h http://$target:$line -o /root/Desktop/Xtoolib/nikto-$target.txt; done
-	#x-terminal-emulator --execute nikto -h http://$target -o /root/Desktop/Xtoolib/nikto-$target.txt
+	#cat http-$target.txt | while read line; do x-terminal-emulator --execute nikto -h http://$target:$line -o /root/Desktop/Xtoolib/nikto-$target.txt; done
 	
 	## Dirb
 	echo -e "\e[93m[~] Starting  Dirb Scan\e[36m"
 	## build loop for all http open and scan them
-	cat http-$target.txt | while read line; do x-terminal-emulator --execute dirb http://$target:$line -o /root/Desktop/Xtoolib/dirb-$target.txt; done
-	#x-terminal-emulator --execute dirb  http://$target -o /root/Desktop/Xtoolib/dirb-$target.txt
+	#cat http-$target.txt | while read line; do x-terminal-emulator --execute dirb http://$target:$line -o /root/Desktop/Xtoolib/dirb-$target.txt; done
 	
 
 	## Create new file of all url
@@ -73,7 +71,6 @@ XtoolibAuto()
 	command cat nikto-$target.txt | cut -d ":"  -f2 | grep "/" | cut -d " " -f3 > weblist-$target.txt
 	## Append to the file before new site that nikto don't discover.
 	command cat dirb-$target.txt | cut -d " " -f 2 | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" >> weblist-$target.txt && cat dirb-$target.txt | cut -d " " -f 3 | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" >> weblist-$target.txt
-	#command cat dirb-$target.txt | cut -d " " -f 2 | grep "http" >> weblist-$target.txt && cat dirb-$target.txt | cut -d " " -f 3 | grep "http" >> weblist-$target.txt
 	
 	clear
 	echo "[⁂] Finish Recon reports"
@@ -95,10 +92,21 @@ XtoolibAuto()
 	echo "[⁂] Start Enumeration"
 	echo "======================================================================================================================"
 	
+	## Option 1 more easy, have bug...
+	## Need to download list from github about specipc URL { With GitHub I have bug....}
+	#command git clone https://github.com/trickdeath0/Xtoolib.git && mv /root/Desktop/Xtoolib/Xtoolib/searchex.txt /root/Desktop/Xtoolib/searchex.txt && rm -r Xtoolib	
+	#command grep -Ff "searchex.txt" "nmap-$target.txt"
+	
+	## Option 2 need to add to this file the new info
+	#command echo -e "vsftpd\nOpenSSH\nsmtpd\nBIND\nApache httpd\nSamba smbd\nProFTPD\nMySQL\nPostgreSQL\nUnrealIRCd\npache Jserv\nApache Tomcat\nNode.js\nRuby\n" > /root/Desktop/Xtoolib/searchex.txt
+	#command grep -Ff "searchex.txt" "nmap-$target.txt"
+	command cat nmap-$target.txt | grep -e "vsftpd" -e "penSSH" -e "smtpd" -e "BIND" -e "Apache httpd" -e "Samba smbd" -e "ProFTPD" -e "MySQL" -e "PostgreSQL" -e "UnrealIRCd" -e "pache Jserv" -e "Apache Tomcat" -e "Node.js" -e "Ruby"
+	
+	## need to sreach for exploit in searchsloit
 	
 	
-	
-	clear
+	echo -e " "
+	#clear
 	echo "[⁂] Finish Enumeration reports"
 	echo "======================================================================================================================"
 	echo -e " "
@@ -122,7 +130,7 @@ XtoolibAuto()
 before()
 { 
 	clear
-	echo -e "\e[0;31m Etical use only \e[0m"
+	echo -e "\e[0;31m Ethical use only \e[0m"
 	echo -e "\e[36mThe program includes Scanning, Enumeration, Explosion and Privilege Escalation"
 	sleep 1
 	XtoolibAuto
@@ -150,7 +158,7 @@ logo()
 	▀       ▀       ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀  
 			  
 		# ===== #
-		# Created Aug 2021 | Copyright (c) 2021 - 2021 Shay Giladi.
+		# Created Aug 2021 | Copyright (c) 2021 Shay Giladi.
 		# Update ----- 2021
 		# ===== #
 																						  
